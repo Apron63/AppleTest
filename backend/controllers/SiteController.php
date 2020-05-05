@@ -1,6 +1,7 @@
 <?php
 namespace backend\controllers;
 
+use app\models\AppleSearch;
 use Yii;
 use yii\web\Controller;
 use yii\filters\VerbFilter;
@@ -19,21 +20,21 @@ class SiteController extends Controller
     {
         return [
             'access' => [
-                'class' => AccessControl::className(),
+                'class' => AccessControl::class,
                 'rules' => [
                     [
                         'actions' => ['login', 'error'],
                         'allow' => true,
                     ],
                     [
-                        'actions' => ['logout', 'index'],
+                        'actions' => ['logout', 'index', 'time-boost', 'reset-boost'],
                         'allow' => true,
                         'roles' => ['@'],
                     ],
                 ],
             ],
             'verbs' => [
-                'class' => VerbFilter::className(),
+                'class' => VerbFilter::class,
                 'actions' => [
                     'logout' => ['post'],
                 ],
@@ -54,13 +55,23 @@ class SiteController extends Controller
     }
 
     /**
-     * Displays homepage.
+     * Главная страница.
      *
      * @return string
      */
     public function actionIndex()
     {
-        return $this->render('index');
+        $timeBooster = Yii::$app->session->get('timeBooster');
+        if (!$timeBooster) {
+            $timeBooster = 0;
+            Yii::$app->session->set('timeBooster', $timeBooster);
+        }
+        $searchModel = new AppleSearch();
+        $dataProvider = $searchModel->search(Yii::$app->request->queryParams);
+        return $this->render('index', [
+            'dataProvider' => $dataProvider,
+            'timeBooster' => $timeBooster,
+        ]);
     }
 
     /**

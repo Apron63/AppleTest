@@ -1,60 +1,33 @@
-<p align="center">
-    <a href="https://github.com/yiisoft" target="_blank">
-        <img src="https://avatars0.githubusercontent.com/u/993323" height="100px">
-    </a>
-    <h1 align="center">Yii 2 Advanced Project Template</h1>
-    <br>
-</p>
+<h4>Установка приложения</h4>
+1. Установить приложение с GitHub
+2. Выполнить composer update
+3. Для приложения Advanced необходимо выполнить php init. Выбрать DEV окружение
+4. Настроить бд - указать в common/config/main-local.php имя БД, например apple_test
+5. Установить первоначальные данные при помощи миграции php yii migrate
 
-Yii 2 Advanced Project Template is a skeleton [Yii 2](http://www.yiiframework.com/) application best for
-developing complex Web applications with multiple tiers.
+<h4>Особенности работы приложения</h4>
+На главном экране расположен список яблок, существующих в системе (за исключением полностью съеденных)
+Первоначально предполагается, что яблоко в приложении можно создать при помощи соответствующей кнопки.
+Также в приложении используется "ускоритель времени". В стандарном рабочем приложении наилучшим вариантом
+будет использование планировщика задач для проверки статуса яблока в случае, если оно упало. 
+В приложении можно искуственно "перевести" время по 1 часу. "Новое время", а точнее, разница с текущим в часах,
+сохраняется в сессии. Таким образом, дав упасть яблоку, можно "перевести часы" на 5 часов вперед и убедиться, что
+у яблока сменился статус. Также время создания яблока и время его падения будут учитывать этот временнной эффект.
 
-The template includes three tiers: front end, back end, and console, each of which
-is a separate Yii application.
+<h4>Действия над объектами</h4>
+1. Создать яблоко. Яблоко создается с текущим временен + "ускорение", что потребовало некоторым образом модифицировать
+стандартное поведение, что не является однозначно правильным решением, на мой взгляд. Тем не менее такое
+решение позволяет наглядно продемонстрировать течение процессов.
+2. Дать упасть яблоку с дерева. Время падения сохраняется как текущее + "ускорение", что тоже является 
+допущением для наглядности работы.
+3. Съесть яблоко полностью или частично. Необходимо ввести значение процентов в соответствующее поле ввода, далее
+нажать ссылку "съесть" 
+<b>нажатие кнопки Enter в настоящее время не обрабатыватся</b>
+Если указанное значение превышает допустимые пределы либо не может быть преобразовано в число, изменения процентов 
+не происходит.
+Если яблоко съедено, оно становится недоступным для просмотра.
+4. Для отображения смены статуса яблока в случае если оно лежит на земле, служит кнопка "Время +1 час".
+При этом происходит "ускорение" времени на 1 час. Таким образом, нажание 5 раз на указанную кнопку приводит к тому, что 
+со времени падения яблока проходит 5 часов и статус яблока изменится, если оно в данный момент доступно для
+отображения.
 
-The template is designed to work in a team development environment. It supports
-deploying the application in different environments.
-
-Documentation is at [docs/guide/README.md](docs/guide/README.md).
-
-[![Latest Stable Version](https://img.shields.io/packagist/v/yiisoft/yii2-app-advanced.svg)](https://packagist.org/packages/yiisoft/yii2-app-advanced)
-[![Total Downloads](https://img.shields.io/packagist/dt/yiisoft/yii2-app-advanced.svg)](https://packagist.org/packages/yiisoft/yii2-app-advanced)
-[![Build Status](https://travis-ci.com/yiisoft/yii2-app-advanced.svg?branch=master)](https://travis-ci.com/yiisoft/yii2-app-advanced)
-
-DIRECTORY STRUCTURE
--------------------
-
-```
-common
-    config/              contains shared configurations
-    mail/                contains view files for e-mails
-    models/              contains model classes used in both backend and frontend
-    tests/               contains tests for common classes    
-console
-    config/              contains console configurations
-    controllers/         contains console controllers (commands)
-    migrations/          contains database migrations
-    models/              contains console-specific model classes
-    runtime/             contains files generated during runtime
-backend
-    assets/              contains application assets such as JavaScript and CSS
-    config/              contains backend configurations
-    controllers/         contains Web controller classes
-    models/              contains backend-specific model classes
-    runtime/             contains files generated during runtime
-    tests/               contains tests for backend application    
-    views/               contains view files for the Web application
-    web/                 contains the entry script and Web resources
-frontend
-    assets/              contains application assets such as JavaScript and CSS
-    config/              contains frontend configurations
-    controllers/         contains Web controller classes
-    models/              contains frontend-specific model classes
-    runtime/             contains files generated during runtime
-    tests/               contains tests for frontend application
-    views/               contains view files for the Web application
-    web/                 contains the entry script and Web resources
-    widgets/             contains frontend widgets
-vendor/                  contains dependent 3rd-party packages
-environments/            contains environment-based overrides
-```
